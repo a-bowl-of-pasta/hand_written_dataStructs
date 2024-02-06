@@ -24,9 +24,9 @@ struct node
 //* - - - - - - - - - list class
 class linkedList
 {
-    node *head; // first node
-    node *tail; // last node
-    int numOfNodes;
+    node *head;     // first node
+    node *tail;     // last node
+    int numOfNodes; // keeps track of node num
 
 public:
     void append(const int data);                      // adds new node to end
@@ -35,8 +35,8 @@ public:
     void display();                                   // displays stuff
     void remove(const int i = 0);                     // removes at index i //* defaults i to 0  or default delete's head
     int getNodeCount() { return numOfNodes; }         // returns the number of nodes
-    int getHead() { return head->data; }
-    int getTail() { return tail->data; }
+    int getHead() { return head->data; }              // returns the data in head
+    int getTail() { return tail->data; }              // returns the data in tail
     linkedList()
     {
         head = NULL;
@@ -68,9 +68,9 @@ void linkedList::append(const int data)
 //* - - - - - insert method
 void linkedList::insert(const int data, int index)
 {
-    node *insertedNode = new node(data);
-    numOfNodes = numOfNodes + 1;
-    if (index == 0)
+    node *insertedNode = new node(data); // creates new node
+    numOfNodes = numOfNodes + 1;         // adds to node total
+    if (index == 0)                      // if insert at head, replace head
     {
         insertedNode->last = tail;
         insertedNode->next = head;
