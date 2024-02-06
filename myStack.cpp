@@ -10,7 +10,7 @@ class stack
     }
 
 public:
-    void pop() { myData.remove(-1); }
+    void pop() { myData.removeAtTail(); }
     void push(int data) { myData.append(data); }
     bool isEmpty();
     int top() { return myData.getTail(); }
