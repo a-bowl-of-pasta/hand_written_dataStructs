@@ -11,10 +11,6 @@ isEmpty - checks if empty
 class myQeue
 {
         linkedList theData;
-        ~myQeue()
-        {
-                theData.sweep();
-        }
 
 public:
         void enqeue(int data) { theData.append(data); }

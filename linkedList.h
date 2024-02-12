@@ -1,25 +1,36 @@
 #include <iostream>
-
-struct node
-{
-    int data;
-    node *next;
-    node *last;
-
-    node(const int data)
-    {
-        this->data = data;
-        next = NULL;
-        last = NULL;
-    }
-};
-
 //* - - - - - - - - - list class
 class linkedList
 {
+    struct node
+    {
+        int data;
+        node *next;
+        node *last;
+
+        node(const int data)
+        {
+            this->data = data;
+            next = NULL;
+            last = NULL;
+        }
+    };
+    node **memTracker;
+    /*
+    todo: populate memtracker with memory location of each node
+    * each time node is created, throw into memTracker
+    * when deleted create new array of size (old array) + 1
+    * when removing make a new array of size (old array ) -1
+    ! problem with this :: insertion and deletion would be way slower
+     */
     node *head;
     node *tail;
     int numOfNodes;
+
+    ~linkedList()
+    {
+        sweep();
+    }
 
 public:
     void append(const int data);
