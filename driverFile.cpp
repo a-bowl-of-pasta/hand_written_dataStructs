@@ -1,7 +1,7 @@
 #include <iostream>
-#include "linkedList.cpp"
-#include "myQeue.cpp"
-#include "myStack.cpp"
+#include "linkedList.h"
+#include "myQeue.h"
+#include "myStack.h"
 //* - - - - - - these are the functions for linked List testing
 
 void testInsert(linkedList &myList)
@@ -15,7 +15,6 @@ void testSweep(linkedList &myList)
 }
 void testLinkedList()
 {
-    linkedList myList;
 }
 //* - - - - - - these are the functions for stack Testing
 void testStack()

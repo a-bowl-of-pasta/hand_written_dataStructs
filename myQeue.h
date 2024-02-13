@@ -1,5 +1,3 @@
-#include "linkedList.cpp"
-
 /*
         implimentations ::
 enqeue - removes first element
@@ -10,25 +8,12 @@ isEmpty - checks if empty
 */
 class myQeue
 {
-        linkedList theData;
 
 public:
-        void enqeue(int data) { theData.append(data); }
-        void deqeue() { theData.remove(); }
-        int peek() { return theData.getHead(); }
-        int getSize() { return theData.getNodeCount(); }
+        void enqeue(){};
+        void deqeue(){};
+        int peek(){};
+        int getSize(){};
         bool isEmpty();
-        void display() { theData.display(); }
+        void display(){};
 };
-
-bool myQeue::isEmpty()
-{
-        if (theData.getNodeCount() > 0)
-        {
-                return false;
-        }
-        else
-        {
-                return true;
-        }
-}

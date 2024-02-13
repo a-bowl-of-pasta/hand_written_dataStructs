@@ -10,7 +10,6 @@ class stack
         node(int pData) : data(pData), next(nullptr), prev(nullptr) {}
     };
 
-    node *base;
     node *topNode;
     node *poppedNode;
 
@@ -26,7 +25,7 @@ public:
     void display();
     void clean();
 
-    stack() : base(nullptr), topNode(nullptr), poppedNode(nullptr) {}
+    stack() : topNode(nullptr), poppedNode(nullptr) {}
     ~stack()
     {
         clean();
@@ -38,12 +37,9 @@ public:
 void stack::push(int data)
 {
     node *createdNode = new node(data);
-    if (base == nullptr)
+    if (topNode == nullptr)
     {
-        base = createdNode;
         topNode = createdNode;
-        base->next = topNode;
-        topNode->prev = base;
     }
     else
     {
@@ -79,8 +75,8 @@ void stack::pop()
             delete poppedNode;
             poppedNode = nullptr;
         }
-        delete base;
-        base = nullptr;
+        delete topNode;
+        topNode = nullptr;
     }
     // if there are multiple elements in the stack
     else
