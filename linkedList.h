@@ -98,19 +98,18 @@ void linkedList::popBack()
         {
             throw std::out_of_range("out of range big dog");
         }
+        node *oldTail = tail;
+        tail = oldTail->prev;
+        tail->next = head;
+        head->prev = tail;
+        delete oldTail;
+        count = count - 1;
     }
     catch (std::out_of_range &exe)
     {
 
         std::cout << exe.what();
     }
-
-    node *oldTail = tail;
-    tail = oldTail->prev;
-    tail->next = head;
-    head->prev = tail;
-    delete oldTail;
-    count = count - 1;
 }
 void linkedList::popFront()
 {
@@ -120,18 +119,18 @@ void linkedList::popFront()
         {
             throw std::out_of_range("out of range big dog");
         }
+
+        node *oldHead = head;
+        head = oldHead->next;
+        tail->next = head;
+        head->prev = tail;
+        delete oldHead;
+        count = count - 1;
     }
     catch (std::out_of_range &exe)
     {
         std::cout << exe.what();
     }
-
-    node *oldHead = head;
-    head = oldHead->next;
-    tail->next = head;
-    head->prev = tail;
-    delete oldHead;
-    count = count - 1;
 }
 //* - - - - - - - - - - - index of i methods
 void linkedList::insert(int data, int i)
@@ -142,42 +141,42 @@ void linkedList::insert(int data, int i)
         {
             throw std::out_of_range("you're out of range big guy");
         }
+        node *createdNode = new node(data);
+        if (i == 0)
+        {
+            createdNode->next = head;
+            head->prev = createdNode;
+            head = createdNode;
+            head->prev = tail;
+            tail->next = head;
+        }
+        else if (i == count - 1)
+        {
+            node *beforeTail = tail->prev;
+            beforeTail->next = createdNode;
+            createdNode->prev = beforeTail;
+            createdNode->next = tail;
+            tail->prev = createdNode;
+        }
+        else
+        {
+            node *travel = head;
+            for (int j = 0; j < i - 1; j++)
+            {
+                travel = travel->next;
+            }
+            createdNode->next = travel->next;
+            travel->next = createdNode;
+            createdNode->prev = travel;
+            travel = createdNode->next;
+            travel->prev = createdNode;
+        }
+        count = count + 1;
     }
     catch (std::out_of_range &exe)
     {
         std::cout << exe.what();
     }
-    node *createdNode = new node(data);
-    if (i == 0)
-    {
-        createdNode->next = head;
-        head->prev = createdNode;
-        head = createdNode;
-        head->prev = tail;
-        tail->next = head;
-    }
-    else if (i == count - 1)
-    {
-        node *beforeTail = tail->prev;
-        beforeTail->next = createdNode;
-        createdNode->prev = beforeTail;
-        createdNode->next = tail;
-        tail->prev = createdNode;
-    }
-    else
-    {
-        node *travel = head;
-        for (int j = 0; j < i - 1; j++)
-        {
-            travel = travel->next;
-        }
-        createdNode->next = travel->next;
-        travel->next = createdNode;
-        createdNode->prev = travel;
-        travel = createdNode->next;
-        travel->prev = createdNode;
-    }
-    count = count + 1;
 }
 void linkedList::removeAt(int i)
 {
@@ -187,40 +186,39 @@ void linkedList::removeAt(int i)
         {
             throw std::out_of_range("you're out of range big guy");
         }
+        node *trash = nullptr;
+
+        if (i == 0)
+        {
+            trash = head;
+            head = head->next;
+            delete trash;
+            tail->next = head;
+            head->prev = tail;
+        }
+        else if (i == count - 1)
+        {
+            trash = tail;
+            tail = tail->prev;
+            delete trash;
+            tail->next = head;
+            head->prev = tail;
+        }
+        else
+        {
+            trash = head;
+            for (int j = 0; j < i - 1; j++)
+            {
+                trash = trash->next;
+            }
+            trash->prev->next = trash->next;
+            trash->next->prev = trash->prev;
+            delete trash;
+        }
     }
     catch (std::out_of_range &exe)
     {
         std::cout << exe.what();
-    }
-    node *trash = nullptr;
-
-    if (i == 0)
-    {
-        trash = head;
-        head = head->next;
-        delete trash;
-        tail->next = head;
-        head->prev = tail;
-    }
-    else if (i == count - 1)
-    {
-        trash = tail;
-        tail = tail->prev;
-        delete trash;
-        tail->next = head;
-        head->prev = tail;
-    }
-    else
-    {
-        // TODO :: delete at index i
-        trash = head;
-        for (int j = 0; j < i - 1; j++)
-        {
-            trash = trash->next;
-        }
-        trash->prev->next = trash->next;
-        trash->next->prev = trash->prev;
-        delete trash;
     }
 }
 //* - - - - - - - - - - - clean Up method
