@@ -77,29 +77,29 @@ void stack::pop()
         {
             throw std::out_of_range("stack is empty");
         }
+        if (poppedNode != nullptr) // saved in case reversal is called
+        {
+            delete poppedNode;
+            poppedNode = nullptr;
+        }
+        if (size() > 1) // more than 1 elm in stack
+        {
+            poppedNode = top;
+            top = top->prev;
+            top->next = nullptr;
+        }
+        else if (size() == 1) // only 1 elm in stack
+        {
+            poppedNode = top;
+            delete top;
+            top = nullptr;
+        }
+        count = count - 1;
     }
     catch (std::out_of_range &exe)
     {
         std::cout << exe.what();
     }
-    if (poppedNode != nullptr) // saved in case reversal is called
-    {
-        delete poppedNode;
-        poppedNode = nullptr;
-    }
-    if (size() > 1) // more than 1 elm in stack
-    {
-        poppedNode = top;
-        top = top->prev;
-        top->next = nullptr;
-    }
-    else if (size() == 1) // only 1 elm in stack
-    {
-        poppedNode = top;
-        delete top;
-        top = nullptr;
-    }
-    count = count - 1;
 }
 void stack::reversePop()
 {
@@ -109,15 +109,15 @@ void stack::reversePop()
         {
             throw std::out_of_range("there is not a node to reverse");
         }
+        top->next = poppedNode;
+        top = top->next;
+        poppedNode = nullptr;
+        count = count + 1;
     }
     catch (std::out_of_range &exe)
     {
         std::cout << exe.what();
     }
-    top->next = poppedNode;
-    top = top->next;
-    poppedNode = nullptr;
-    count = count + 1;
 }
 // * - - - - - - - - - - other methods (not insertion or deletion)
 void stack::display()
