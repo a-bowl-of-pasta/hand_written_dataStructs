@@ -1,3 +1,6 @@
+#ifndef M_S_H
+#define M_S_H
+
 #include <iostream>
 
 class stack
@@ -10,8 +13,9 @@ class stack
         node(int pData) : data(pData), next(nullptr), prev(nullptr) {}
     };
 
-    node *topNode;
+    node *top;
     node *poppedNode;
+    int count;
 
 public:
     //*-------- insert || delete methods
@@ -19,15 +23,29 @@ public:
     void push(int data);
     void reversePop();
     //*--------- not insert or delete
-    bool isEmpty();
-    int top();
-    int size();
+    int peekTop() { return top->data; }
+    int size() { return count; }
     void display();
     void clean();
-
-    stack() : topNode(nullptr), poppedNode(nullptr) {}
+    bool isEmpty()
+    {
+        if (count == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    stack() : top(nullptr), poppedNode(nullptr), count(0) {}
     ~stack()
     {
+        if (poppedNode != nullptr) // clears the remaining data in poppedNode, aka can no longer reverse
+        {
+            delete poppedNode;
+            poppedNode = nullptr;
+        }
         clean();
     }
 };
@@ -37,68 +55,87 @@ public:
 void stack::push(int data)
 {
     node *createdNode = new node(data);
-    if (topNode == nullptr)
+    if (top == nullptr) // first elm of stack
     {
-        topNode = createdNode;
+        top = createdNode;
+        top->prev = nullptr;
     }
-    else
+    else // the next elms of stack
     {
-        topNode->next = createdNode;
-        createdNode->prev = topNode;
-        topNode = createdNode;
+        top->next = createdNode;
+        createdNode->prev = top;
+        top = createdNode;
     }
+    count = count + 1;
 }
 
 void stack::pop()
 {
-    // if there are no elements in the stack
-    if (size() <= 0)
+    try
     {
-        throw std::out_of_range("stack is empty");
-    }
-
-    // if there are more than 1 elemetns in the stack
-    if (poppedNode == nullptr && size() > 1)
-    {
-        poppedNode = topNode;
-        topNode = topNode->prev;
-        topNode->next = nullptr;
-    }
-    // if there is only one element in the stack
-    else if (size() == 1)
-    {
-        // TODO:: send a confirmation message "if proceede, all of stack will be deleted"
-
-        if (poppedNode != nullptr)
+        if (size() <= 0) // no elms in stack
         {
-            poppedNode->prev = nullptr;
-            delete poppedNode;
-            poppedNode = nullptr;
+            throw std::out_of_range("stack is empty");
         }
-        delete topNode;
-        topNode = nullptr;
     }
-    // if there are multiple elements in the stack
-    else
+    catch (std::out_of_range &exe)
     {
-        poppedNode->prev = nullptr;
+        std::cout << exe.what();
+    }
+    if (poppedNode != nullptr) // saved in case reversal is called
+    {
         delete poppedNode;
         poppedNode = nullptr;
-
-        poppedNode = topNode;
-        topNode = topNode->prev;
-        topNode->next = nullptr;
     }
+    if (size() > 1) // more than 1 elm in stack
+    {
+        poppedNode = top;
+        top = top->prev;
+        top->next = nullptr;
+    }
+    else if (size() == 1) // only 1 elm in stack
+    {
+        poppedNode = top;
+        delete top;
+        top = nullptr;
+    }
+    count = count - 1;
 }
-
 void stack::reversePop()
 {
-    if (poppedNode == nullptr)
+    try
     {
-        throw std::out_of_range("there is not a node to reverse");
+        if (poppedNode == nullptr) // if there is not a node to reverse
+        {
+            throw std::out_of_range("there is not a node to reverse");
+        }
     }
-    topNode->next = poppedNode;
-    topNode = topNode->next;
+    catch (std::out_of_range &exe)
+    {
+        std::cout << exe.what();
+    }
+    top->next = poppedNode;
+    top = top->next;
     poppedNode = nullptr;
+    count = count + 1;
 }
 // * - - - - - - - - - - other methods (not insertion or deletion)
+void stack::display()
+{
+    node *travel = top;
+    while (travel->prev != nullptr)
+    {
+        std::cout << travel->data << std::endl;
+        travel = travel->prev;
+    }
+}
+void stack::clean()
+{
+    while (top != nullptr)
+    {
+        node *travel = top;
+        top = travel->prev;
+        delete travel;
+    }
+}
+#endif
